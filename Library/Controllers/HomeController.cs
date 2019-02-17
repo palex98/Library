@@ -19,23 +19,25 @@ namespace Library.Controllers
             {
                 var user = context.User.Where(u => u.Id == userId).FirstOrDefault();
 
-                var listOfUsersBook = context.Loans.Where(u => u.UserId == user.Id);
+                var listOfUsersBook = context.Loan.Where(u => u.UserId == user.Id);
                 ViewBag.UsersBook = listOfUsersBook.ToList();
 
-                var libraries = from l in context.Library group l by l.LibraryId;
+                var libraries = context.Library;
 
                 foreach (var lib in libraries)
                 {
 
                     LibraryCollection libraryCollection = new LibraryCollection();
 
-                    libraryCollection.Number = lib.Key;
+                    libraryCollection.Title = lib.Title;
 
-                    foreach(var bk in lib)
+                    var books = context.LibraryItem.Where(l => l.LibraryId == lib.Id);
+
+                    foreach(var bk in books)
                     {
                         Book book = context.Book.Where(b => b.Id == bk.BookId).FirstOrDefault();
 
-                        int count = context.Library.Where(c => c.BookId == book.Id).FirstOrDefault().Count;
+                        int count = context.LibraryItem.Where(c => c.BookId == book.Id).FirstOrDefault().Count;
 
                         BookInLibrary bookInLibrary = new BookInLibrary { Book = book, Count = count };
 

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Хранилище LibraryDBModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище LibraryDBModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Book">
           <Key>
             <PropertyRef Name="Id" />
@@ -19,11 +19,18 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="LibraryItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LibraryId" Type="int" Nullable="false" />
           <Property Name="BookId" Type="int" Nullable="false" />
           <Property Name="Count" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="Loans">
+        <EntityType Name="Loan">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -41,16 +48,18 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="BookCount" Type="int" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Password" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
         </EntityType>
         <EntityContainer Name="Хранилище LibraryDBModelContainer">
           <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Library" EntityType="Self.Library" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Loans" EntityType="Self.Loans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LibraryItem" EntityType="Self.LibraryItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Loan" EntityType="Self.Loan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LibraryDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -68,11 +77,18 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LibraryItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LibraryId" Type="Int32" Nullable="false" />
           <Property Name="BookId" Type="Int32" Nullable="false" />
           <Property Name="Count" Type="Int32" Nullable="false" />
-          <Property Name="LibraryId" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="Loans">
+        <EntityType Name="Loan">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -90,13 +106,14 @@
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BookCount" Type="Int32" Nullable="false" />
           <Property Name="Login" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityContainer Name="LibraryDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Book" EntityType="Self.Book" />
           <EntitySet Name="Library" EntityType="Self.Library" />
-          <EntitySet Name="Loans" EntityType="Self.Loans" />
+          <EntitySet Name="LibraryItem" EntityType="Self.LibraryItem" />
+          <EntitySet Name="Loan" EntityType="Self.Loan" />
           <EntitySet Name="User" EntityType="Self.User" />
         </EntityContainer>
       </Schema>
@@ -118,16 +135,24 @@
           <EntitySetMapping Name="Library">
             <EntityTypeMapping TypeName="LibraryDBModel.Library">
               <MappingFragment StoreEntitySet="Library">
-                <ScalarProperty Name="LibraryId" ColumnName="LibraryId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LibraryItem">
+            <EntityTypeMapping TypeName="LibraryDBModel.LibraryItem">
+              <MappingFragment StoreEntitySet="LibraryItem">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LibraryId" ColumnName="LibraryId" />
                 <ScalarProperty Name="BookId" ColumnName="BookId" />
                 <ScalarProperty Name="Count" ColumnName="Count" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Loans">
-            <EntityTypeMapping TypeName="LibraryDBModel.Loans">
-              <MappingFragment StoreEntitySet="Loans">
+          <EntitySetMapping Name="Loan">
+            <EntityTypeMapping TypeName="LibraryDBModel.Loan">
+              <MappingFragment StoreEntitySet="Loan">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="LibraryId" ColumnName="LibraryId" />

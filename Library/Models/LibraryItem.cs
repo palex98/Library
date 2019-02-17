@@ -12,11 +12,11 @@ namespace Library.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Loans
+    public partial class LibraryItem
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
         public int LibraryId { get; set; }
         public int BookId { get; set; }
+        public int Count { get; set; }
     }
 }

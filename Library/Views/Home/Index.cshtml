@@ -37,7 +37,7 @@
                 <div class="table-responsive text-nowrap">
                     @foreach (var lib in Model)
                     {
-                        <h3>Library #@lib.Number</h3>
+                        <h3>Library "@lib.Title"</h3>
                         <table class="table table-striped">
                             <thead class="thead-inverse">
                                 <tr>
@@ -117,7 +117,7 @@
                                         <option disabled selected value="0">Select library...</option>
                                         @foreach (var lib in Model)
                                         {
-                                            <option value="@lib.Number">@lib.Number</option>
+                                            <option value="@lib.Title">@lib.Title</option>
                                         }
                                     </select>
                                 </div>

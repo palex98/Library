@@ -12,9 +12,11 @@ namespace Library.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Library
+    public partial class Loan
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public int UserId { get; set; }
+        public int LibraryId { get; set; }
+        public int BookId { get; set; }
     }
 }
