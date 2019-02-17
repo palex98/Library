@@ -1,0 +1,12 @@
+﻿#navbar {
+    background-color: #ffe0b2;
+    border-radius: 0px 0px 10px 10px;
+    margin-bottom: 20px;
+    box-shadow: 1px 3px 18px 0px rgba(0,0,0,0.68);"
+}
+
+.formWrapper {
+    border: 1px dashed lightgray;
+    padding: 20px;
+    border-radius: 10px;
+}

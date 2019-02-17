@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Sing In</title>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Styles.Render("~/bundles/bootstrap.css")
+</head>
+<body>
+    <div class="container" >
+        <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please sign in</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="/SignIn/SignIn" method="POST">
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Login" name="login" type="text" autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Password" name="password" type="password">
+                                </div>
+                                <input class="btn btn-lg btn-success btn-block" type="submit" value="Login">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+﻿@using Library.Models.Custom
+
+@model List<LibraryCollection>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/scripts")
+    @Styles.Render("~/bundles/bootstrap.css")
+    @Styles.Render("~/bundles/styles")
+</head>
+<body>
+    <div class="container col-md-10">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
+                    <a class="navbar-brand" href="#">Library manager</a>
+                    <div class="collapse navbar-collapse" id="navbarText">
+                        <ul class="navbar-nav mr-auto"></ul>
+                        <span class="navbar-text">
+                            Log Out
+                        </span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="table-responsive text-nowrap">
+                    @foreach (var lib in Model)
+                    {
+                        <h3>Library #@lib.Number</h3>
+                        <table class="table table-striped">
+                            <thead class="thead-inverse">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Genre</th>
+                                    <th>Available</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var book in lib.ListOfBooks)
+                                {
+                                    <tr>
+                                        <th scope="row">#</th>
+                                        <td>@book.Book.Title</td>
+                                        <td>@book.Book.Author</td>
+                                        <td>@book.Book.Genre</td>
+                                        @if (ViewBag.isAdmin == true)
+                                        {
+                                            <td><input class="form-control" type="number" value="@book.Count" id="example-number-input" min="0"></td>
+                                            <td><button type="button" class="btn btn-outline-danger">Delete</button></td>
+                                        }
+                                        else
+                                        {
+                                            <td>@book.Count</td>
+                                            <td><button type="button" class="btn btn-outline-success">Take to read</button></td>
+                                        }
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+            @if (ViewBag.isAdmin == true)
+            {
+                <div class="col-md-4">
+                    <h3>Actions</h3>
+                    <table class="table table-striped">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>
+                                    <a class="btn btn-outline-success" data-toggle="collapse" href="#addBookForm" role="button" aria-expanded="false" aria-controls="addBookForm">
+                                        Add new book
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="btn btn-outline-success" data-toggle="collapse" href="#createLibrary" role="button" aria-expanded="false" aria-controls="createLibrary">
+                                        Create new library
+                                    </a>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="collapse" id="addBookForm">
+                        <div class="formWrapper">
+                            <h3>Add book to library</h3>
+                            <form id="addForm" method="post" action="">
+                                <div class="form-group">
+                                    <label for="exampleInputTitle">Title of book</label>
+                                    <input type="text" class="form-control" id="exampleInputTitle" placeholder="Title" name="Title" autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputAuthor">Author of book</label>
+                                    <input type="text" class="form-control" id="exampleInputAuthor" placeholder="Author" name="Author" autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputGenre">Genre of book</label>
+                                    <input type="text" class="form-control" id="exampleInputGenre" placeholder="Genre" name="Genre" autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputSelector">Add to library</label>
+                                    <select name="Library" class="form-control" id="exampleInputSelector">
+                                        <option disabled selected value="0">Select library...</option>
+                                        @foreach (var lib in Model)
+                                        {
+                                            <option value="@lib.Number">@lib.Number</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputCount">Number of copies</label>
+                                    <input class="form-control" type="number" value="1" id="exampleInputCount" min="0" name="Count">
+                                </div>
+                                <button type="button" class="btn btn-success" id="addBookBtn">Confirm</button>
+                                <button type="button" class="btn btn btn-warning">Reset</button>
+                                <button type="button" class="btn btn-danger">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="collapse" id="createLibrary">
+                        <div class="formWrapper">
+                            <h3>Create library</h3>
+                            <form id="createForm">
+                                <div class="form-group">
+                                    <label for="exampleInputTitle">Title of library</label>
+                                    <input type="text" class="form-control" id="exampleInputTitle" placeholder="Title">
+                                </div>
+                                <button type="button" class="btn btn-success">Create</button>
+                                <button type="button" class="btn btn-danger">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                <div class="col-md-4">
+                    <h3>My books</h3>
+                    <table class="table table-striped">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+    <div id="editor" class="section panel panel-primary"></div>
+</body>
+</html>
