@@ -74,6 +74,9 @@ function createLibrarySuccess() {
 
     GetLibraries();
     $("#alert").html(alert);
+
+    UpdateListOfLibraries();
+
     setTimeout(function () {
         $("#alert").empty();
     }, 2000);
@@ -281,9 +284,34 @@ function DeleteLibrary(title) {
         url: 'api/Library/',
         method: "DELETE",
         data: { title: title },
-        success: function () { GetLibraries(); },
+        success: function () { GetLibraries(); UpdateListOfLibraries(); },
         error: function (response) {
             alert('error');
         }
     });
 }
+
+function UpdateListOfLibraries() {
+    $.ajax({
+        url: 'api/Counter/',
+        method: "GET",
+        success: function (data) { RenderLibrariesList(data); },
+        error: function (response) {
+            alert('error');
+        }
+    });
+}
+
+function RenderLibrariesList(data) {
+    var html = "";
+    html += '<label for="exampleInputSelector">Add to library</label>';
+    html += '<select name="LibraryTitle" class="form-control" id="exampleInputSelector">';
+    html += '<option disabled selected value="0">Select library...</option>';
+    for (i = 0; i < data.length; i++) {
+        html += '<option value="' + data[i].Title + '">' + data[i].Title + '</option>';
+    }
+    html += '</select>';
+
+    $("#listOfLibrary").html(html);
+}
+    

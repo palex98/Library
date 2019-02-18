@@ -13,6 +13,13 @@ namespace Library.Controllers
         [HttpGet]
         public ActionResult Index(int userId)
         {
+            var userFromCookies = HttpContext.Request.Cookies["user"].Value;
+
+            if(userFromCookies != userId.ToString())
+            {
+                return Redirect("/");
+            }
+
             List<LibraryCollection> collection = new List<LibraryCollection>();
 
             using (var context = new LibraryDBEntities())

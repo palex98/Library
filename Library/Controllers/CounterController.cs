@@ -10,6 +10,15 @@ namespace Library.Controllers
 {
     public class CounterController : ApiController
     {
+        public List<Models.Library> GetLibraries()
+        {
+            using (var context = new LibraryDBEntities())
+            {
+                var libraries = context.Library.ToList();
+
+                return libraries;
+            }
+        }
 
         public void PutChangeCounter([FromBody]PutCounterParams prms)
         {

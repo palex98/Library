@@ -7,35 +7,43 @@ using System.Web.Mvc;
 
 namespace Library.Controllers
 {
-    public class SignInController : Controller
+    public class SignUpController : Controller
     {
-        // GET: SingIn
+        [Route("/SignUp")]
         public ActionResult Index()
         {
-            return View("SignIn");
+            return View("SignUp");
         }
 
         [HttpPost]
-        public ActionResult SignIn(string login, string password)
+        public ActionResult SignUp(string login, string password)
         {
             using (var context = new LibraryDBEntities())
             {
                 User user;
-            
+
                 try
                 {
                     user = context.User.First(u => u.Login == login);
                 }
                 catch (Exception)
                 {
-                    return View("SignIn");
+                    ViewBag.Message = "User not exist!";
+                    return View("SignUp");
                 }
 
                 if (user != null && user.Password == password)
                 {
+                    HttpContext.Response.Cookies["user"].Value = user.Id.ToString();
                     return RedirectToAction("Index", "Home", new { userId = user.Id });
                 }
-                return View();
+                else
+                {
+                    ViewBag.Message = "Password is wrong!";
+                    return View();
+                }
+
+
             }
         }
     }

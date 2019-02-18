@@ -8,8 +8,8 @@
     @Styles.Render("~/bundles/bootstrap.css")
     <style>
         .vertical-center {
-            min-height: 100%; /* Fallback for browsers do NOT support vh unit */
-            min-height: 100vh; /* These two lines are counted as one :-)       */
+            min-height: 100%;
+            min-height: 100vh;
             display: flex;
             align-items: center;
         }
@@ -22,15 +22,19 @@
                 <div class="vertical-center">
                     <div class="panel-body">
                         <h3 class="panel-title">Please sign up</h3>
-                        <form action="/SignIn/SignIn" method="POST">
+                        <form action="/SignUp/SignUp" method="POST">
                             <div class="form-group">
                                 <input class="form-control" id="login" placeholder="Login" name="login" type="text" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <input class="form-control" placeholder="Password" name="password" type="password">
                             </div>
-                            <a href="">Don't have an account?</a>
-                            <input class="btn btn-lg btn-success btn-block" type="submit" value="Login">
+                            @if (ViewBag.Message != null)
+                            {
+                                <p style="color: red;">@ViewBag.Message</p>
+                            }
+                            <a href="/Registration/Index">Don't have an account?</a>
+                            <input class="btn btn-lg btn-success btn-block" type="submit" value="Sign up">
                         </form>
                     </div>
                 </div>
