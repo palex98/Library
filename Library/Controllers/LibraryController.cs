@@ -46,7 +46,7 @@ namespace Library.Controllers
             return collection;
         }
 
-        public HttpResponseMessage PostLibrary([FromBody]LibParams prms)
+        public HttpResponseMessage PostLibrary([FromBody]PostParams prms)
         {
             using (var context = new LibraryDBEntities())
             {
@@ -62,9 +62,34 @@ namespace Library.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
+
+        public void DeleteLibrary([FromBody]DeleteLParams title)
+        {
+            using (var context = new LibraryDBEntities())
+            {
+                var library = context.Library.Where(l => l.Title == title.Title).FirstOrDefault();
+
+                var items = context.LibraryItem.Where(i => i.LibraryId == library.Id);
+
+                context.LibraryItem.RemoveRange(items);
+
+                var loans = context.Loan.Where(l => l.LibraryId == library.Id);
+
+                context.Loan.RemoveRange(loans);
+
+                context.Library.Remove(library);
+
+                context.SaveChanges();
+            }
+        }
     }
 
-    public class LibParams
+    public class DeleteLParams
+    {
+        public string Title { get; set; }
+    }
+
+    public class PostParams
     {
         public string Title { get; set; }
     }

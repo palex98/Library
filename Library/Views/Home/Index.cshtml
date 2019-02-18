@@ -22,8 +22,8 @@
                     <a class="navbar-brand" href="#">Library manager</a>
                     <div class="collapse navbar-collapse" id="navbarText">
                         <ul class="navbar-nav mr-auto"></ul>
-                        <span class="navbar-text">
-                            Log Out
+                        <span class="navbar-text" >
+                            <a href="/SignIn/Index">Log Out</a>
                         </span>
                     </div>
                 </nav>
@@ -31,148 +31,124 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="table-responsive text-nowrap">
-                    @foreach (var lib in Model)
-                    {
-                        <h3>Library "@lib.Title"</h3>
-                        <table class="table table-striped">
-                            <thead class="thead-inverse">                                
-                                <tr>
-                                    <th>#</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>Genre</th>
-                                    <th>Available</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var book in lib.ListOfBooks)
-                                {
+    <div id="mainWrapper">
+        <div>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="table-responsive text-nowrap" id="libContainer">
+                    </div>
+                </div>
+                @if (ViewBag.isAdmin == true)
+                {
+                    <div class="col-md-5">
+                        <div class="sticky">
+                            <h3>Actions</h3>
+                            <table class="table table-striped">
+                                <thead class="thead-inverse">
                                     <tr>
-                                        <th scope="row">@(lib.ListOfBooks.IndexOf(book)+1)</th>
-                                        <td><div style="width: 150px; overflow-x: hidden;">@book.Book.Title</div></td>
-                                        <td><div style="width: 150px; overflow-x: hidden;">@book.Book.Author</div></td>
-                                        <td><div style="width: 110px; overflow-x: hidden;">@book.Book.Genre</div></td>
-                                        @if (ViewBag.isAdmin == true)
-                                        {
-                                            <td><input class="form-control" type="number" value="@book.Count" id="example-number-input" min="0"></td>
-                                            <td><button type="button" class="btn btn-outline-danger" onclick="DeleteBook('@book.Book.Id');">Delete</button></td>
-                                        }
-                                        else
-                                        {
-                                            <td>@book.Count</td>
-                                            <td><button type="button" class="btn btn-outline-success">Take to read</button></td>
-                                        }
-
+                                        <th>
+                                            <a id="addBtn" class="btn btn-outline-success" data-toggle="collapse" href="#addBookForm" role="button" aria-expanded="false" aria-controls="addBookForm">
+                                                Add new book
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <a id="createBtn" class="btn btn-outline-success" data-toggle="collapse" href="#createLibrary" role="button" aria-expanded="false" aria-controls="createLibrary">
+                                                Create new library
+                                            </a>
+                                        </th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                </div>
-            </div>
-            @if (ViewBag.isAdmin == true)
-            {
-            <div class="col-md-4">
-                <h3>Actions</h3>
-                <table class="table table-striped">
-                    <thead class="thead-inverse">
-                        <tr>
-                            <th>
-                                <a id="addBtn" class="btn btn-outline-success" data-toggle="collapse" href="#addBookForm" role="button" aria-expanded="false" aria-controls="addBookForm">
-                                    Add new book
-                                </a>
-                            </th>
-                            <th>
-                                <a id="createBtn" class="btn btn-outline-success" data-toggle="collapse" href="#createLibrary" role="button" aria-expanded="false" aria-controls="createLibrary">
-                                    Create new library
-                                </a>
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-                <div class="collapse" id="addBookForm">
-                    <div class="formWrapper">
-                        <h3>Add book to library</h3>
-                        <form id="addForm" method="post" action="">
-                            <div class="form-group">
-                                <label for="exampleInputTitle">Title of book</label>
-                                <input type="text" class="form-control" id="exampleInputTitle" placeholder="Title" name="Title" autocomplete="off">
+                                </thead>
+                            </table>
+                            <div class="collapse" id="addBookForm">
+                                <div class="formWrapper">
+                                    <h3>Add book to library</h3>
+                                    <form id="addForm" method="post" action="">
+                                        <div class="form-group">
+                                            <label for="exampleInputTitle">Title of book</label>
+                                            <input type="text" class="form-control" id="exampleInputTitle" placeholder="Title" name="Title" autocomplete="off">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputAuthor">Author of book</label>
+                                            <input type="text" class="form-control" id="exampleInputAuthor" placeholder="Author" name="Author" autocomplete="off">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputGenre">Genre of book</label>
+                                            <input type="text" class="form-control" id="exampleInputGenre" placeholder="Genre" name="Genre" autocomplete="off">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputSelector">Add to library</label>
+                                            <select name="LibraryTitle" class="form-control" id="exampleInputSelector">
+                                                <option disabled selected value="0">Select library...</option>
+                                                @foreach (var lib in Model)
+                                                {
+                                                    <option value="@lib.Title">@lib.Title</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputCount">Number of copies</label>
+                                            <input class="form-control" type="number" value="1" id="exampleInputCount" min="0" name="Count">
+                                        </div>
+                                        <button type="button" class="btn btn-success" id="addBookBtn">Confirm</button>
+                                        <button type="button" class="btn btn btn-warning" id="resetBookBtn">Reset</button>
+                                        <button type="button" class="btn btn-danger" id="cancelBookBtn">Cancel</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputAuthor">Author of book</label>
-                                <input type="text" class="form-control" id="exampleInputAuthor" placeholder="Author" name="Author" autocomplete="off">
+                            <div class="collapse" id="createLibrary">
+                                <div class="formWrapper">
+                                    <h3>Create library</h3>
+                                    <form id="createForm">
+                                        <div class="form-group">
+                                            <label for="exampleInputTitle">Title of library</label>
+                                            <input type="text" class="form-control" id="exampleInputTitle" placeholder="Title" name="Title">
+                                        </div>
+                                        <button type="button" class="btn btn-success" id="createLibBtn">Create</button>
+                                        <button type="button" class="btn btn-danger" id="cancelLibBtn">Cancel</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputGenre">Genre of book</label>
-                                <input type="text" class="form-control" id="exampleInputGenre" placeholder="Genre" name="Genre" autocomplete="off">
+                            <div id="alert">
+
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputSelector">Add to library</label>
-                                <select name="LibraryTitle" class="form-control" id="exampleInputSelector">
-                                    <option disabled selected value="0">Select library...</option>
-                                    @foreach (var lib in Model)
-                                    {
-                                        <option value="@lib.Title">@lib.Title</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputCount">Number of copies</label>
-                                <input class="form-control" type="number" value="1" id="exampleInputCount" min="0" name="Count">
-                            </div>
-                            <button type="button" class="btn btn-success" id="addBookBtn">Confirm</button>
-                            <button type="button" class="btn btn btn-warning" id="resetBookBtn">Reset</button>
-                            <button type="button" class="btn btn-danger" id="cancelBookBtn">Cancel</button>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                <div class="collapse" id="createLibrary">
-                    <div class="formWrapper">
-                        <h3>Create library</h3>
-                        <form id="createForm">
-                            <div class="form-group">
-                                <label for="exampleInputTitle">Title of library</label>
-                                <input type="text" class="form-control" id="exampleInputTitle" placeholder="Title" name="Title">
-                            </div>
-                            <button type="button" class="btn btn-success" id="createLibBtn">Create</button>
-                            <button type="button" class="btn btn-danger" id="cancelLibBtn">Cancel</button>
-                        </form>
+                }
+                else
+                {
+                    <div class="col-md-5" id="booksBlock">
+                        <div></div>
                     </div>
-                </div>
-                <div class="alert alert-success" role="alert">
-                    This is a success alert—check it out!
-                </div>
+                }
             </div>
-            }
-            else
-            {
-                <div class="col-md-4">
-                    <h3>My books</h3>
-                    <table class="table table-striped">
-                        <thead class="thead-inverse">
-                            <tr>
-                                <th>#</th>
-                                <th>Title</th>
-                                <th>Author</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            }
         </div>
     </div>
-    <div id="editor" class="section panel panel-primary"></div>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            SetAdmin('@ViewBag.isAdmin');
-        });
-    </script>
+    <div class="container">
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>Select end date:</h6>
+                        <input type="datetime-local" class="form-control" onchange="DateTimeChanged();" id="datePicker">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" onclick="TakeBook(window.takeBookId)" id="modalTakeBtn" disabled>Take</button>
+                        <button type="button" class="btn btn-danger"  data-dismiss="modal" id="modalCancel">Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
 </body>
 </html>

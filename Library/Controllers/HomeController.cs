@@ -48,6 +48,8 @@ namespace Library.Controllers
                 }
 
                 ViewBag.IsAdmin = user.IsAdmin;
+
+                HttpContext.Response.Cookies["user"].Value = userId.ToString();
             }
             return View(collection);
         }

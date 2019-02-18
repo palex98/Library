@@ -1,12 +1,57 @@
-﻿#navbar {
+﻿body{
+
+}
+
+td {
+    word-break: break-all;
+}
+
+#mainWrapper{
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+#navbar {
     background-color: #ffe0b2;
     border-radius: 0px 0px 10px 10px;
     margin-bottom: 20px;
-    box-shadow: 1px 3px 18px 0px rgba(0,0,0,0.68);"
+    box-shadow: 1px 3px 18px 0px rgba(0,0,0,0.68);
 }
 
 .formWrapper {
     border: 1px dashed lightgray;
     padding: 20px;
     border-radius: 10px;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.text-nowrap {
+    white-space: normal !important;
+}
+
+.btn {
+    white-space: nowrap !important;
+}
+
+.sticky {
+    position: sticky;
+    top: 1em;
 }

@@ -1,4 +1,7 @@
 ﻿using Library.Models;
+using Library.Models.Custom;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +11,30 @@ namespace Library.Controllers
 {
     public class BookController : ApiController
     {
+        public List<BookUser> GetUsersBook(int id)
+        {
+            using (var conetxt = new LibraryDBEntities())
+            {
+                var loans = conetxt.Loan.Where(u => u.UserId == id);
+
+                List<BookUser> books = new List<BookUser>();
+
+                foreach (var l in loans)
+                {
+                    Book book = conetxt.Book.Where(b => b.Id == l.BookId).FirstOrDefault();
+
+                    BookUser item = new BookUser
+                    {
+                        Book = book,
+                        EndDate = l.EndDate.ToString()
+                    };
+
+                    books.Add(item);
+                }
+
+                return books;
+            }
+        }
 
         public HttpResponseMessage PostBook([FromBody]BookParams prms)
         {
@@ -54,30 +81,37 @@ namespace Library.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        public HttpResponseMessage DeleteBook([FromBody]Del bookId)
+        public HttpResponseMessage DeleteBook([FromBody]DelParams bookId)
         {
-
-            int.TryParse(bookId.bookId, out int id);
 
             using (var context = new LibraryDBEntities())
             {
-                var bookToDelete = context.Book.Where(b => b.Id == id).FirstOrDefault();
+                var bookToDelete = context.Book.Where(b => b.Id == bookId.bookId).FirstOrDefault();
 
-                var itemInLibraryToDelete = context.LibraryItem.Where(i => i.BookId == id).FirstOrDefault();
+                var itemInLibraryToDelete = context.LibraryItem.Where(i => i.BookId == bookId.bookId).FirstOrDefault();
 
                 context.Book.Remove(bookToDelete);
                 context.LibraryItem.Remove(itemInLibraryToDelete);
+
+                var loans = context.Loan.Where(l => l.BookId == bookId.bookId);
+
+                context.Loan.RemoveRange(loans);
+                context.SaveChanges();
 
                 context.SaveChanges();
             }
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
+
+        
     }
 
-    public class Del
+
+
+    public class DelParams
     {
-        public string bookId { get; set; }
+        public int bookId { get; set; }
     }
 
     public class BookParams

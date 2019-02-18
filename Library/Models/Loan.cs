@@ -18,5 +18,6 @@ namespace Library.Models
         public int UserId { get; set; }
         public int LibraryId { get; set; }
         public int BookId { get; set; }
+        public System.DateTime EndDate { get; set; }
     }
 }
