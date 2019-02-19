@@ -1,6 +1,5 @@
 ﻿using Library.Models;
 using Library.Models.Custom;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,7 +11,7 @@ namespace Library.Controllers
     public class LibraryController : ApiController
     {
 
-        public List<LibraryCollection> GetLibraries()
+        public List<LibraryCollection> GetLibraries(int sort)
         {
             List<LibraryCollection> collection = new List<LibraryCollection>();
 
@@ -41,6 +40,21 @@ namespace Library.Controllers
                     }
 
                     collection.Add(libraryCollection);
+                }
+
+                if (sort == 1)
+                {
+                    foreach (var c in collection)
+                    {
+                        c.ListOfBooks = c.ListOfBooks.OrderBy(b => b.Book.Author).ToList();
+                    }
+                }
+                else
+                {
+                    foreach (var c in collection)
+                    {
+                        c.ListOfBooks = c.ListOfBooks.OrderBy(b => b.Book.Genre).ToList();
+                    }
                 }
             }
             return collection;

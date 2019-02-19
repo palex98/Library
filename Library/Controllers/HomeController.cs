@@ -1,9 +1,7 @@
 ﻿using Library.Models;
 using Library.Models.Custom;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Library.Controllers
@@ -57,7 +55,10 @@ namespace Library.Controllers
                 ViewBag.IsAdmin = user.IsAdmin;
 
                 HttpContext.Response.Cookies["user"].Value = userId.ToString();
+
+                ViewBag.UserName = user.Name;
             }
+
             return View(collection);
         }
     }

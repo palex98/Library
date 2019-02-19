@@ -1,6 +1,5 @@
 ﻿using Library.Models;
 using Library.Models.Custom;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -102,12 +101,8 @@ namespace Library.Controllers
             }
 
             return Request.CreateResponse(HttpStatusCode.OK);
-        }
-
-        
+        }   
     }
-
-
 
     public class DelParams
     {

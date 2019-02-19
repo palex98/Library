@@ -12,6 +12,7 @@ namespace Library.Controllers
         [Route("/SignUp")]
         public ActionResult Index()
         {
+            HttpContext.Response.Cookies["user"].Value = "";
             return View("SignUp");
         }
 
@@ -42,8 +43,6 @@ namespace Library.Controllers
                     ViewBag.Message = "Password is wrong!";
                     return View();
                 }
-
-
             }
         }
     }

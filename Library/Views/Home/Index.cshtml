@@ -11,8 +11,10 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/scripts")
-    @Styles.Render("~/bundles/bootstrap.css")
+    @Styles.Render("~/bundles/bootstrapcss")
     @Styles.Render("~/bundles/styles")
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="container col-md-12">
@@ -21,9 +23,14 @@
                 <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
                     <a class="navbar-brand" href="#">Library manager</a>
                     <div class="collapse navbar-collapse" id="navbarText">
-                        <ul class="navbar-nav mr-auto"></ul>
-                        <span class="navbar-text" >
-                            <a href="/">Log Out</a>
+                        <ul class="navbar-nav mr-auto">
+                            <li><a onclick="GetLibraries(1)">Sort by author</a></li>
+                            <li><a> | </a></li>
+                            <li><a onclick="GetLibraries(2)">Sort by genre</a></li>
+                        </ul>
+                        <span class="navbar-text">
+                            @ViewBag.UserName
+                            <a href="/">Sign Out</a>
                         </span>
                     </div>
                 </nav>
@@ -139,14 +146,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" onclick="TakeBook(window.takeBookId)" id="modalTakeBtn" disabled>Take</button>
-                        <button type="button" class="btn btn-danger"  data-dismiss="modal" id="modalCancel">Cancel</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="modalCancel">Cancel</button>
                     </div>
                 </div>
-
             </div>
         </div>
-
     </div>
-
 </body>
 </html>
