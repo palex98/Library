@@ -1,5 +1,7 @@
-function RenderTables(data) {
+﻿function RenderTables(data) {
+
     var html = "";
+
     for (var i = 0; i < data.length; i++) {
         html += '<h3>Library «' + data[i].Title + '»';
         if (window.isAdmin === true) {
@@ -24,8 +26,7 @@ function RenderTables(data) {
             if (window.isAdmin === true) {
                 html += '<td><input class="form-control" onchange="ChangeCounter(this.value, ' + data[i].ListOfBooks[j].Book.Id + ')" type="number" value="' + data[i].ListOfBooks[j].Count + '" id="example-number-input" min="0"></td>';
                 html += '<td><button type="button" class="btn btn-outline-danger" onclick="DeleteBook(\'' + data[i].ListOfBooks[j].Book.Id + '\');">Delete</button></td>';
-            }
-            else {
+            } else {
                 html += '<td>' + data[i].ListOfBooks[j].Count + '</td>';
                 html += '<td><button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#myModal" onclick="SetTakeBook(' + data[i].ListOfBooks[j].Book.Id + ');"';
                 if (+data[i].ListOfBooks[j].Count < 1) {
@@ -37,10 +38,13 @@ function RenderTables(data) {
         }
         html += '</tbody></table>';
     }
+
     InsertHtml(html, 'libContainer');
 }
+
 function GetListOfUsersBookSuccess(books) {
     var html = "";
+
     html += '<h3>My books</h3>';
     html += '<table class="table table-striped">';
     html += '<thead class="thead-inverse">';
@@ -61,8 +65,10 @@ function GetListOfUsersBookSuccess(books) {
         html += '</tr>';
     }
     html += '</tbody></table>';
+
     InsertHtml(html, 'booksBlock');
 }
+
 function RenderLibrariesList(data) {
     var html = "";
     html += '<label for="exampleInputSelector">Add to library</label>';
@@ -72,6 +78,6 @@ function RenderLibrariesList(data) {
         html += '<option value="' + data[i].Title + '">' + data[i].Title + '</option>';
     }
     html += '</select>';
+
     $("#listOfLibrary").html(html);
 }
-//# sourceMappingURL=HtmlRendering.js.map

@@ -1,4 +1,4 @@
-function sendAjaxForm(ajax_form, url, success) {
+﻿function sendAjaxForm(ajax_form, url, success) {
     var data = $("#" + ajax_form).serialize();
     $.ajax({
         url: url,
@@ -13,6 +13,7 @@ function sendAjaxForm(ajax_form, url, success) {
         }
     });
 }
+
 function addBookSuccess(message) {
     var alert = '<div class="alert alert-success" role="alert">Book successfully added!</div >';
     $("#cancelBookBtn").click();
@@ -22,6 +23,7 @@ function addBookSuccess(message) {
         $("#alert").empty();
     }, 2000);
 }
+
 function DeleteBook(id) {
     $.ajax({
         url: 'api/Book/',
@@ -34,6 +36,7 @@ function DeleteBook(id) {
         }
     });
 }
+
 function TakeBook(id) {
     $.ajax({
         url: 'api/UsersBook/',
@@ -46,9 +49,13 @@ function TakeBook(id) {
         }
     });
 }
+
 function GetLibraries(sort) {
+
     var loader = '<div style="text-align: center; margin-top: 100px;"><div class="loader" style="display: inline-block;"></div></div>';
+
     $("#libContainer").html(loader);
+
     $.ajax({
         url: 'api/Library',
         method: "GET",
@@ -60,6 +67,7 @@ function GetLibraries(sort) {
         }
     });
 }
+
 function GetUserInfo(userId) {
     $.ajax({
         url: 'api/User/',
@@ -72,6 +80,7 @@ function GetUserInfo(userId) {
         }
     });
 }
+
 function GetListOfUsersBook(userId) {
     $.ajax({
         url: 'api/Book/',
@@ -84,6 +93,7 @@ function GetListOfUsersBook(userId) {
         }
     });
 }
+
 function ReturnBook(bookId) {
     $.ajax({
         url: 'api/UsersBook/',
@@ -96,6 +106,7 @@ function ReturnBook(bookId) {
         }
     });
 }
+
 function ChangeCounter(value, bookId) {
     $.ajax({
         url: 'api/Counter/',
@@ -106,6 +117,7 @@ function ChangeCounter(value, bookId) {
         }
     });
 }
+
 function DeleteLibrary(title) {
     $.ajax({
         url: 'api/Library/',
@@ -117,6 +129,7 @@ function DeleteLibrary(title) {
         }
     });
 }
+
 function UpdateListOfLibraries() {
     $.ajax({
         url: 'api/Counter/',
@@ -127,4 +140,3 @@ function UpdateListOfLibraries() {
         }
     });
 }
-//# sourceMappingURL=AjaxRequest.js.map
