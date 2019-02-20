@@ -25,17 +25,15 @@ namespace Library.Controllers
                     return View("Registration");
                 }
 
-                User newUser = new User
+                context.User.Add(new User
                 {
                     Name = name,
                     Login = login,
                     Password = password,
                     Email = email,
-                    BookCount = 0, 
+                    BookCount = 0,
                     IsAdmin = false
-                };
-
-                context.User.Add(newUser);
+                });
                 context.SaveChanges();
             }
             return View("Success");

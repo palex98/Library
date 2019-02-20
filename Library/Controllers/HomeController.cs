@@ -13,7 +13,7 @@ namespace Library.Controllers
         {
             var userFromCookies = HttpContext.Request.Cookies["user"].Value;
 
-            if(userFromCookies != userId.ToString())
+            if (userFromCookies != userId.ToString())
             {
                 return Redirect("/");
             }
@@ -22,41 +22,30 @@ namespace Library.Controllers
 
             using (var context = new LibraryDBEntities())
             {
-                var user = context.User.Where(u => u.Id == userId).FirstOrDefault();
-
-                var listOfUsersBook = context.Loan.Where(u => u.UserId == user.Id);
-                ViewBag.UsersBook = listOfUsersBook.ToList();
-
-                var libraries = context.Library;
-
-                foreach (var lib in libraries)
+                foreach (var lib in context.Library)
                 {
-
-                    LibraryCollection libraryCollection = new LibraryCollection();
-
-                    libraryCollection.Title = lib.Title;
-
-                    var books = context.LibraryItem.Where(l => l.LibraryId == lib.Id);
-
-                    foreach(var bk in books)
+                    foreach (var bk in context.LibraryItem.Where(l => l.LibraryId == lib.Id))
                     {
-                        Book book = context.Book.Where(b => b.Id == bk.BookId).FirstOrDefault();
 
-                        int count = context.LibraryItem.Where(c => c.BookId == book.Id).FirstOrDefault().Count;
+                        int count = context.LibraryItem.Where(c => c.BookId == context.Book.Where(b => b.Id == bk.BookId).FirstOrDefault().Id).FirstOrDefault().Count;
 
-                        BookInLibrary bookInLibrary = new BookInLibrary { Book = book, Count = count };
-
-                        libraryCollection.ListOfBooks.Add(bookInLibrary);
+                        new LibraryCollection
+                        {
+                            Title = lib.Title
+                        }.ListOfBooks.Add(new BookInLibrary { Book = context.Book.Where(b => b.Id == bk.BookId).FirstOrDefault(), Count = count });
                     }
 
-                    collection.Add(libraryCollection);
+                    collection.Add(new LibraryCollection
+                    {
+                        Title = lib.Title
+                    });
                 }
 
-                ViewBag.IsAdmin = user.IsAdmin;
+                ViewBag.IsAdmin = context.User.Where(u => u.Id == userId).FirstOrDefault().IsAdmin;
 
                 HttpContext.Response.Cookies["user"].Value = userId.ToString();
 
-                ViewBag.UserName = user.Name;
+                ViewBag.UserName = context.User.Where(u => u.Id == userId).FirstOrDefault().Name;
             }
 
             return View(collection);

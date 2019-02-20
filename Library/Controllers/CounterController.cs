@@ -7,7 +7,17 @@ namespace Library.Controllers
 {
     public class CounterController : ApiController
     {
-        public List<Models.Library> GetLibraries()
+        public List<Models.Library> GetListOfLibraries()
+        {
+            return GetList();
+        }
+
+        public void PutChangeCounter([FromBody]PutCounterParams prms)
+        {
+            ChangeCounter(prms);
+        }
+
+        public static List<Models.Library> GetList()
         {
             using (var context = new LibraryDBEntities())
             {
@@ -17,7 +27,7 @@ namespace Library.Controllers
             }
         }
 
-        public void PutChangeCounter([FromBody]PutCounterParams prms)
+        public void ChangeCounter(PutCounterParams prms)
         {
             using (var context = new LibraryDBEntities())
             {

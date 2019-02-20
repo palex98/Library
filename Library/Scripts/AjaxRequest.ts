@@ -5,16 +5,16 @@
         method: "POST",
         dataType: "text",
         data: data,
-        success: function (response) {
-            success(response.responseText);
+        success: function () {
+            success();
         },
-        error: function (response) {
+        error: function () {
             alert('Something went wrong:( Try again!');
         }
     });
 }
 
-function addBookSuccess(message) {
+function addBookSuccess() {
     var alert = '<div class="alert alert-success" role="alert">Book successfully added!</div >';
     $("#cancelBookBtn").click();
     GetLibraries(1);
@@ -31,7 +31,7 @@ function DeleteBook(id) {
         dataType: "text",
         data: { bookId: id },
         success: function () { GetLibraries(1); },
-        error: function (response) {
+        error: function () {
             alert('Something went wrong:( Try again!');
         }
     });

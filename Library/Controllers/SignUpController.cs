@@ -13,6 +13,7 @@ namespace Library.Controllers
         public ActionResult Index()
         {
             HttpContext.Response.Cookies["user"].Value = "";
+
             return View("SignUp");
         }
 
