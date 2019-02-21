@@ -79,5 +79,9 @@ function RenderLibrariesList(data) {
     }
     html += '</select>';
 
-    $("#listOfLibrary").html(html);
+    document.getElementById("listOfLibrary").innerHTML = html;
+}
+
+function InsertHtml(html, id) {
+    document.getElementById(id).innerHTML = html;
 }

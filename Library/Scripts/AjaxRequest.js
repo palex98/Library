@@ -1,25 +1,11 @@
-function sendAjaxForm(ajax_form, url, success) {
-    var data = $("#" + ajax_form).serialize();
-    $.ajax({
-        url: url,
-        method: "POST",
-        dataType: "text",
-        data: data,
-        success: function () {
-            success();
-        },
-        error: function () {
-            alert('Something went wrong:( Try again!');
-        }
-    });
-}
+/// <reference path="Script.ts" />
 function addBookSuccess() {
     var alert = '<div class="alert alert-success" role="alert">Book successfully added!</div >';
-    $("#cancelBookBtn").click();
+    document.getElementById("cancelBookBtn").click();
     GetLibraries(1);
-    $("#alert").html(alert);
+    document.getElementById("alert").innerHTML = alert;
     setTimeout(function () {
-        $("#alert").empty();
+        document.getElementById("alert").innerHTML = "";
     }, 2000);
 }
 function DeleteBook(id) {
@@ -39,8 +25,8 @@ function TakeBook(id) {
         url: 'api/UsersBook/',
         type: "PUT",
         dataType: "text",
-        data: { userId: getCookie('user'), bookId: id, date: $("#datePicker").val() },
-        success: function () { GetListOfUsersBook(getCookie('user')); GetLibraries(1); $("#modalCancel").click(); },
+        data: { userId: getCookie('user'), bookId: id, date: document.getElementById("datePicker").value },
+        success: function () { GetListOfUsersBook(getCookie('user')); GetLibraries(1); document.getElementById("modalCancel").click(); },
         error: function (response) {
             alert(response.responseText);
         }
@@ -48,14 +34,29 @@ function TakeBook(id) {
 }
 function GetLibraries(sort) {
     var loader = '<div style="text-align: center; margin-top: 100px;"><div class="loader" style="display: inline-block;"></div></div>';
-    $("#libContainer").html(loader);
+    document.getElementById("libContainer").innerHTML = loader;
     $.ajax({
         url: 'api/Library',
         method: "GET",
         dataType: "json",
         data: { sort: sort },
         success: function (data) { RenderTables(data); },
-        error: function (response) {
+        error: function () {
+            alert('Something went wrong:( Try again!');
+        }
+    });
+}
+function sendAjaxForm(ajax_form, url, success) {
+    var data = $("#" + ajax_form).serialize();
+    $.ajax({
+        url: url,
+        method: "POST",
+        dataType: "text",
+        data: data,
+        success: function () {
+            success();
+        },
+        error: function () {
             alert('Something went wrong:( Try again!');
         }
     });
@@ -67,7 +68,7 @@ function GetUserInfo(userId) {
         dataType: "json",
         data: { id: userId },
         success: function (data) { GetUserInfoSuccess(data); },
-        error: function (response) {
+        error: function () {
             alert('Something went wrong:( Try again!');
         }
     });
@@ -79,7 +80,7 @@ function GetListOfUsersBook(userId) {
         dataType: "json",
         data: { id: userId },
         success: function (data) { GetListOfUsersBookSuccess(data); },
-        error: function (response) {
+        error: function () {
             alert('Something went wrong:( Try again!');
         }
     });
@@ -90,8 +91,8 @@ function ReturnBook(bookId) {
         method: "DELETE",
         dataType: "json",
         data: { bookId: bookId, userId: getCookie('user') },
-        success: function (data) { GetListOfUsersBook(getCookie('user')); GetLibraries(1); },
-        error: function (response) {
+        success: function () { GetListOfUsersBook(getCookie('user')); GetLibraries(1); },
+        error: function () {
             alert('Something went wrong:( Try again!');
         }
     });
@@ -101,7 +102,7 @@ function ChangeCounter(value, bookId) {
         url: 'api/Counter/',
         method: "PUT",
         data: { bookId: bookId, value: value },
-        error: function (response) {
+        error: function () {
             alert('Something went wrong:( Try again!');
         }
     });
@@ -112,7 +113,7 @@ function DeleteLibrary(title) {
         method: "DELETE",
         data: { title: title },
         success: function () { GetLibraries(1); UpdateListOfLibraries(); },
-        error: function (response) {
+        error: function () {
             alert('Something went wrong:( Try again!');
         }
     });
@@ -122,9 +123,19 @@ function UpdateListOfLibraries() {
         url: 'api/Counter/',
         method: "GET",
         success: function (data) { RenderLibrariesList(data); },
-        error: function (response) {
+        error: function () {
             alert('Something went wrong:( Try again!');
         }
     });
+}
+function GetUserInfoSuccess(data) {
+    window.userName = data.Name;
+    window.isAdmin = data.isAdmin;
+}
+function SetTakeBook(id) {
+    window.takeBookId = id;
+}
+function DateTimeChanged() {
+    document.getElementById("modalTakeBtn").removeAttribute('disabled');
 }
 //# sourceMappingURL=AjaxRequest.js.map

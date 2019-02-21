@@ -72,6 +72,9 @@ function RenderLibrariesList(data) {
         html += '<option value="' + data[i].Title + '">' + data[i].Title + '</option>';
     }
     html += '</select>';
-    $("#listOfLibrary").html(html);
+    document.getElementById("listOfLibrary").innerHTML = html;
+}
+function InsertHtml(html, id) {
+    document.getElementById(id).innerHTML = html;
 }
 //# sourceMappingURL=HtmlRendering.js.map

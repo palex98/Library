@@ -1,41 +1,34 @@
-/// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="AjaxRequest.ts" />
-$(document).ready(function () {
+window.onload = function () {
     GetUserInfo(getCookie('user'));
     GetLibraries(1);
-    if ($('#booksBlock').length > 0) {
+    if (document.getElementById("booksBlock") != null) {
         GetListOfUsersBook(getCookie('user'));
     }
-    $("#addBookBtn").click(function () {
+    var addBookBtn = document.getElementById("addBookBtn");
+    addBookBtn.onclick = function () {
         sendAjaxForm('addForm', 'api/Book/', addBookSuccess);
-    });
-    $("#resetBookBtn").click(function () {
-        //$("#addForm")[0].reset();
-    });
-    $("#cancelBookBtn").click(function () {
-        //$("#addForm")[0].reset();
-        $("#addBtn").click();
-    });
-    $("#createLibBtn").click(function () {
+    };
+    document.getElementById("cancelBookBtn").onclick = function () {
+        document.getElementById("resetBookBtn").click();
+        document.getElementById("addBtn").click();
+    };
+    document.getElementById("createLibBtn").onclick = function () {
         sendAjaxForm('createForm', 'api/Library/', createLibrarySuccess);
-    });
-    $("#cancelLibBtn").click(function () {
-        //$("#createForm")[0].reset();
-        $("#createBtn").click();
-    });
-});
+    };
+    document.getElementById("cancelLibBtn").onclick = function () {
+        document.getElementById("createBtn").click();
+    };
+};
 function createLibrarySuccess() {
-    $("#cancelLibBtn").click();
+    document.getElementById("cancelLibBtn").click();
     var alert = '<div class="alert alert-success" role="alert">Library successfully created!</div >';
     GetLibraries(1);
-    $("#alert").html(alert);
+    document.getElementById("alert").innerHTML = alert;
     UpdateListOfLibraries();
     setTimeout(function () {
-        $("#alert").empty();
+        document.getElementById("alert").innerHTML = "";
     }, 2000);
-}
-function InsertHtml(html, id) {
-    $("#" + id).html(html);
 }
 function getCookie(cname) {
     var name = cname + "=";
@@ -51,15 +44,5 @@ function getCookie(cname) {
         }
     }
     return "";
-}
-function GetUserInfoSuccess(data) {
-    window.userName = data.Name;
-    window.isAdmin = data.isAdmin;
-}
-function SetTakeBook(id) {
-    window.takeBookId = id;
-}
-function DateTimeChanged() {
-    $('#modalTakeBtn').prop('disabled', false);
 }
 //# sourceMappingURL=Script.js.map
