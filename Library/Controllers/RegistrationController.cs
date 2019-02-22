@@ -1,44 +1,33 @@
 ﻿using Library.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Library.Controllers
 {
     public class RegistrationController : Controller
     {
+        IUserRepository repo;
+
+        public RegistrationController(IUserRepository r)
+        {
+            repo = r;
+        }
+
         public ActionResult Index()
         {
-
             return View("Registration");
         }
 
         public ActionResult Registrate(string name, string login, string email, string password)
         {
-            using (var context = new LibraryDBEntities())
+            if (repo.Registration(name, login, email, password))
             {
-                if(context.User.Any(u => u.Login == login))
-                {
-                    ViewBag.Message = "User with this login already exist";
-                    return View("Registration");
-                }
-
-                User newUser = new User
-                {
-                    Name = name,
-                    Login = login,
-                    Password = password,
-                    Email = email,
-                    BookCount = 0, 
-                    IsAdmin = false
-                };
-
-                context.User.Add(newUser);
-                context.SaveChanges();
+                return View("Success");
             }
-            return View("Success");
+            else
+            {
+                ViewBag.Message = "User with this login already exist";
+                return View("Registration");
+            }
         }
     }
 }

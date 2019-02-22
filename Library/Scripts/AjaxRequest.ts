@@ -1,4 +1,5 @@
-/// <reference path="Script.ts" />
+﻿/// <reference path="Script.ts" />
+
 function addBookSuccess() {
     var alert = '<div class="alert alert-success" role="alert">Book successfully added!</div >';
     document.getElementById("cancelBookBtn").click();
@@ -8,6 +9,7 @@ function addBookSuccess() {
         document.getElementById("alert").innerHTML = "";
     }, 2000);
 }
+
 function DeleteBook(id) {
     $.ajax({
         url: 'api/Book/',
@@ -20,21 +22,26 @@ function DeleteBook(id) {
         }
     });
 }
+
 function TakeBook(id) {
     $.ajax({
         url: 'api/UsersBook/',
         type: "PUT",
         dataType: "text",
-        data: { userId: getCookie('user'), bookId: id, date: document.getElementById("datePicker").value },
+        data: { userId: getCookie('user'), bookId: id, date: (<HTMLInputElement>document.getElementById("datePicker")).value },
         success: function () { GetListOfUsersBook(getCookie('user')); GetLibraries(1); document.getElementById("modalCancel").click(); },
         error: function (response) {
             alert(response.responseText);
         }
     });
 }
+
 function GetLibraries(sort) {
+
     var loader = '<div style="text-align: center; margin-top: 100px;"><div class="loader" style="display: inline-block;"></div></div>';
+
     document.getElementById("libContainer").innerHTML = loader;
+
     $.ajax({
         url: 'api/Library',
         method: "GET",
@@ -46,6 +53,7 @@ function GetLibraries(sort) {
         }
     });
 }
+
 function sendAjaxForm(ajax_form, url, success) {
     var data = $("#" + ajax_form).serialize();
     $.ajax({
@@ -61,6 +69,7 @@ function sendAjaxForm(ajax_form, url, success) {
         }
     });
 }
+
 function GetUserInfo(userId) {
     $.ajax({
         url: 'api/User/',
@@ -73,6 +82,7 @@ function GetUserInfo(userId) {
         }
     });
 }
+
 function GetListOfUsersBook(userId) {
     $.ajax({
         url: 'api/Book/',
@@ -85,6 +95,7 @@ function GetListOfUsersBook(userId) {
         }
     });
 }
+
 function ReturnBook(bookId) {
     $.ajax({
         url: 'api/UsersBook/',
@@ -97,6 +108,7 @@ function ReturnBook(bookId) {
         }
     });
 }
+
 function ChangeCounter(value, bookId) {
     $.ajax({
         url: 'api/Counter/',
@@ -107,6 +119,7 @@ function ChangeCounter(value, bookId) {
         }
     });
 }
+
 function DeleteLibrary(title) {
     $.ajax({
         url: 'api/Library/',
@@ -118,6 +131,7 @@ function DeleteLibrary(title) {
         }
     });
 }
+
 function UpdateListOfLibraries() {
     $.ajax({
         url: 'api/Counter/',
@@ -128,14 +142,16 @@ function UpdateListOfLibraries() {
         }
     });
 }
+
 function GetUserInfoSuccess(data) {
     window.userName = data.Name;
     window.isAdmin = data.isAdmin;
 }
+
 function SetTakeBook(id) {
     window.takeBookId = id;
 }
+
 function DateTimeChanged() {
     document.getElementById("modalTakeBtn").removeAttribute('disabled');
 }
-//# sourceMappingURL=AjaxRequest.js.map
