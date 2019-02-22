@@ -1,4 +1,5 @@
 using Library.Models.Custom;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,74 +9,71 @@ namespace Library.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
+    }
 
-        public static List<LibraryCollection> GetLibraries(int sort)
+    public class LibraryRepository : IDisposable, ILibraryRepository
+    {
+        private LibraryDBEntities context = new LibraryDBEntities();
+
+        public List<LibraryCollection> GetLibraries(int sort)
         {
             List<LibraryCollection> collection = new List<LibraryCollection>();
 
-            using (var context = new LibraryDBEntities())
+            foreach (var lib in context.Library)
             {
-
-                foreach (var lib in context.Library)
+                LibraryCollection libraryCollection = new LibraryCollection
                 {
-                    LibraryCollection libraryCollection = new LibraryCollection
-                    {
-                        Title = lib.Title
-                    };
+                    Title = lib.Title
+                };
 
-                    foreach (var bk in context.LibraryItem.Where(l => l.LibraryId == lib.Id))
-                    {
-                        Book book = context.Book.Where(b => b.Id == bk.BookId).FirstOrDefault();
+                foreach (var bk in context.LibraryItem.Where(l => l.LibraryId == lib.Id))
+                {
+                    Book book = context.Book.Where(b => b.Id == bk.BookId).FirstOrDefault();
 
-                        int count = context.LibraryItem.Where(c => c.BookId == book.Id).FirstOrDefault().Count;
+                    int count = context.LibraryItem.Where(c => c.BookId == book.Id).FirstOrDefault().Count;
 
-                        BookInLibrary bookInLibrary = new BookInLibrary { Book = book, Count = count };
+                    BookInLibrary bookInLibrary = new BookInLibrary { Book = book, Count = count };
 
-                        libraryCollection.ListOfBooks.Add(bookInLibrary);
-                    }
-                    collection.Add(libraryCollection);
+                    libraryCollection.ListOfBooks.Add(bookInLibrary);
                 }
-                SortLibraryCollection(collection, sort);
+                collection.Add(libraryCollection);
             }
+
+            SortLibraryCollection(collection, sort);
+
             return collection;
         }
 
-        public static void CreateLibrary(TitleParam title)
+        public void CreateLibrary(TitleParam title)
         {
-            using (var context = new LibraryDBEntities())
+            Library newLibrary = new Library
             {
-                Library newLibrary = new Library
-                {
-                    Title = title.Title
-                };
+                Title = title.Title
+            };
 
-                context.Library.Add(newLibrary);
+            context.Library.Add(newLibrary);
 
-                context.SaveChanges();
-            }
+            context.SaveChanges();
         }
 
-        public static void DeleteLibrary(TitleParam title)
+        public void DeleteLibrary(TitleParam title)
         {
-            using (var context = new LibraryDBEntities())
-            {
-                var library = context.Library.Where(l => l.Title == title.Title).FirstOrDefault();
+            var library = context.Library.Where(l => l.Title == title.Title).FirstOrDefault();
 
-                var items = context.LibraryItem.Where(i => i.LibraryId == library.Id);
+            var items = context.LibraryItem.Where(i => i.LibraryId == library.Id);
 
-                context.LibraryItem.RemoveRange(items);
+            context.LibraryItem.RemoveRange(items);
 
-                var loans = context.Loan.Where(l => l.LibraryId == library.Id);
+            var loans = context.Loan.Where(l => l.LibraryId == library.Id);
 
-                context.Loan.RemoveRange(loans);
+            context.Loan.RemoveRange(loans);
 
-                context.Library.Remove(library);
+            context.Library.Remove(library);
 
-                context.SaveChanges();
-            }
+            context.SaveChanges();
         }
 
-        public static void SortLibraryCollection(List<LibraryCollection> collection, int sort)
+        public void SortLibraryCollection(List<LibraryCollection> collection, int sort)
         {
             if (sort == 1)
             {
@@ -92,10 +90,62 @@ namespace Library.Models
                 }
             }
         }
+
+        public void ChangeCounter(PutCounterParams prms)
+        {
+            var book = context.LibraryItem.Where(i => i.BookId == prms.bookId).FirstOrDefault();
+
+            book.Count = prms.value;
+
+            context.SaveChanges();
+        }
+
+        public List<Library> GetList()
+        {
+            using (var context = new LibraryDBEntities())
+            {
+                var libraries = context.Library.ToList();
+
+                return libraries;
+            }
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (context != null)
+                {
+                    context.Dispose();
+                    context = null;
+                }
+            }
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+    }
+
+    public interface ILibraryRepository
+    {
+        List<LibraryCollection> GetLibraries(int sort);
+        void CreateLibrary(TitleParam title);
+        void DeleteLibrary(TitleParam title);
+        void SortLibraryCollection(List<LibraryCollection> collection, int sort);
+        void ChangeCounter(PutCounterParams prms);
+        List<Models.Library> GetList();
     }
 
     public class TitleParam
     {
         public string Title { get; set; }
+    }
+
+    public class PutCounterParams
+    {
+        public int value { get; set; }
+        public int bookId { get; set; }
     }
 }

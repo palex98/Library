@@ -7,14 +7,21 @@ namespace Library.Controllers
 {
     public class UsersBookController : ApiController
     {
+        IBookUserRepository repo;
+
+        public UsersBookController(IBookUserRepository r)
+        {
+            repo = r;
+        }
+
         public void DeleteReturnBook([FromBody]ReturnParams prms)
         {
-            BookUser.ReturnBook(prms);
+            repo.ReturnBook(prms);
         }
 
         public HttpResponseMessage PutBookIntoUser([FromBody]PutBookParams prms)
         {
-            var message = BookUser.TakeBook(prms);
+            var message = repo.TakeBook(prms);
 
             if (message == null)
             {

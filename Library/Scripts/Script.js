@@ -6,19 +6,30 @@ window.onload = function () {
         GetListOfUsersBook(getCookie('user'));
     }
     var addBookBtn = document.getElementById("addBookBtn");
-    addBookBtn.onclick = function () {
-        sendAjaxForm('addForm', 'api/Book/', addBookSuccess);
-    };
-    document.getElementById("cancelBookBtn").onclick = function () {
-        document.getElementById("resetBookBtn").click();
-        document.getElementById("addBtn").click();
-    };
-    document.getElementById("createLibBtn").onclick = function () {
-        sendAjaxForm('createForm', 'api/Library/', createLibrarySuccess);
-    };
-    document.getElementById("cancelLibBtn").onclick = function () {
-        document.getElementById("createBtn").click();
-    };
+    if (addBookBtn != null) {
+        addBookBtn.onclick = function () {
+            sendAjaxForm('addForm', 'api/Book/', addBookSuccess);
+        };
+    }
+    var cancelBookBtn = document.getElementById("cancelBookBtn");
+    if (cancelBookBtn != null) {
+        cancelBookBtn.onclick = function () {
+            document.getElementById("resetBookBtn").click();
+            document.getElementById("addBtn").click();
+        };
+    }
+    var createLibBtn = document.getElementById("createLibBtn");
+    if (createLibBtn != null) {
+        createLibBtn.onclick = function () {
+            sendAjaxForm('createForm', 'api/Library/', createLibrarySuccess);
+        };
+    }
+    var cancelLibBtn = document.getElementById("cancelLibBtn");
+    if (cancelLibBtn != null) {
+        cancelLibBtn.onclick = function () {
+            document.getElementById("createBtn").click();
+        };
+    }
 };
 function createLibrarySuccess() {
     document.getElementById("cancelLibBtn").click();

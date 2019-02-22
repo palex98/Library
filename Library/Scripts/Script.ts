@@ -6,7 +6,7 @@ interface Window {
     takeBookId: any;
 }
 
-window.onload =  function () {
+window.onload = function () {
 
     GetUserInfo(getCookie('user'));
 
@@ -18,22 +18,36 @@ window.onload =  function () {
 
     var addBookBtn = document.getElementById("addBookBtn");
 
-    addBookBtn.onclick = function () {
-        sendAjaxForm('addForm', 'api/Book/', addBookSuccess);
-    };
+    if (addBookBtn != null) {
+        addBookBtn.onclick = function () {
+            sendAjaxForm('addForm', 'api/Book/', addBookSuccess);
+        };
+    }
 
-    document.getElementById("cancelBookBtn").onclick = function () {
-        document.getElementById("resetBookBtn").click();
-        document.getElementById("addBtn").click();
-    };
+    var cancelBookBtn = document.getElementById("cancelBookBtn");
 
-    document.getElementById("createLibBtn").onclick = function () {
-        sendAjaxForm('createForm', 'api/Library/', createLibrarySuccess);
-    };
+    if (cancelBookBtn != null) {
+        cancelBookBtn.onclick = function () {
+            document.getElementById("resetBookBtn").click();
+            document.getElementById("addBtn").click();
+        };
+    }
 
-    document.getElementById("cancelLibBtn").onclick = function () {
-        document.getElementById("createBtn").click();
-    };
+    var createLibBtn = document.getElementById("createLibBtn");
+
+    if (createLibBtn != null) {
+        createLibBtn.onclick = function () {
+            sendAjaxForm('createForm', 'api/Library/', createLibrarySuccess);
+        };
+    }
+
+    var cancelLibBtn = document.getElementById("cancelLibBtn");
+
+    if (cancelLibBtn != null) {
+        cancelLibBtn.onclick = function () {
+            document.getElementById("createBtn").click();
+        };
+    }
 };
 
 function createLibrarySuccess() {

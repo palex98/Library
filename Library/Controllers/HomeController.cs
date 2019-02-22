@@ -1,13 +1,19 @@
 ﻿using Library.Models;
-using Library.Models.Custom;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace Library.Controllers
 {
     public class HomeController : Controller
     {
+        ILibraryRepository libRepo;
+        IUserRepository uRepo;
+
+        public HomeController(ILibraryRepository lib, IUserRepository u)
+        {
+            libRepo = lib;
+            uRepo = u;
+        }
+
         [HttpGet]
         public ActionResult Index(int userId)
         {
@@ -18,37 +24,15 @@ namespace Library.Controllers
                 return Redirect("/");
             }
 
-            List<LibraryCollection> collection = new List<LibraryCollection>();
+            var user = uRepo.GetUserInfo(userId);
 
-            using (var context = new LibraryDBEntities())
-            {
-                foreach (var lib in context.Library)
-                {
-                    foreach (var bk in context.LibraryItem.Where(l => l.LibraryId == lib.Id))
-                    {
+            ViewBag.IsAdmin = user.isAdmin;
 
-                        int count = context.LibraryItem.Where(c => c.BookId == context.Book.Where(b => b.Id == bk.BookId).FirstOrDefault().Id).FirstOrDefault().Count;
+            ViewBag.UserName = user.Name;
 
-                        new LibraryCollection
-                        {
-                            Title = lib.Title
-                        }.ListOfBooks.Add(new BookInLibrary { Book = context.Book.Where(b => b.Id == bk.BookId).FirstOrDefault(), Count = count });
-                    }
+            HttpContext.Response.Cookies["user"].Value = userId.ToString();
 
-                    collection.Add(new LibraryCollection
-                    {
-                        Title = lib.Title
-                    });
-                }
-
-                ViewBag.IsAdmin = context.User.Where(u => u.Id == userId).FirstOrDefault().IsAdmin;
-
-                HttpContext.Response.Cookies["user"].Value = userId.ToString();
-
-                ViewBag.UserName = context.User.Where(u => u.Id == userId).FirstOrDefault().Name;
-            }
-
-            return View(collection);
+            return View(libRepo.GetLibraries(1));
         }
     }
 }

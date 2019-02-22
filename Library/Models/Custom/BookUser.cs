@@ -6,9 +6,14 @@ namespace Library.Models.Custom
     public class BookUser
     {
         public Book Book { get; set; }
-        public string EndDate { get; set; }
+        public string EndDate { get; set; }       
+    }
 
-        public static void ReturnBook(ReturnParams prms)
+    public class BookUserRepository: IDisposable, IBookUserRepository
+    {
+        public LibraryDBEntities context = new LibraryDBEntities();
+
+        public void ReturnBook(ReturnParams prms)
         {
             using (var context = new LibraryDBEntities())
             {
@@ -31,7 +36,7 @@ namespace Library.Models.Custom
             }
         }
 
-        public static string TakeBook(PutBookParams prms)
+        public string TakeBook(PutBookParams prms)
         {
             using (var context = new LibraryDBEntities())
             {
@@ -66,6 +71,29 @@ namespace Library.Models.Custom
 
             return null;
         }
+
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (context != null)
+                {
+                    context.Dispose();
+                    context = null;
+                }
+            }
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+    }
+
+    public interface IBookUserRepository
+    {
+        void ReturnBook(ReturnParams prms);
+        string TakeBook(PutBookParams prms);
     }
 
     public class ReturnParams

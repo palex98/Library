@@ -143,7 +143,6 @@ function UpdateListOfLibraries() {
     });
 }
 
-
 function GetUserInfoSuccess(data) {
     window.userName = data.Name;
     window.isAdmin = data.isAdmin;

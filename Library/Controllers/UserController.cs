@@ -5,9 +5,16 @@ namespace Library.Controllers
 {
     public class UserController : ApiController
     {
+        IUserRepository repo;
+
+        public UserController(IUserRepository r)
+        {
+            repo = r;
+        }
+
         public Info GetUserInfo(int id)
         {
-            return Models.User.GetUserInfo(id);
+            return repo.GetUserInfo(id);
         }
     }
 }
