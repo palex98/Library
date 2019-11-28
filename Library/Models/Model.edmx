@@ -112,11 +112,11 @@
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityContainer Name="LibraryDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Book" EntityType="Self.Book" />
-          <EntitySet Name="Library" EntityType="Self.Library" />
-          <EntitySet Name="LibraryItem" EntityType="Self.LibraryItem" />
-          <EntitySet Name="Loan" EntityType="Self.Loan" />
-          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="Books" EntityType="Self.Book" />
+          <EntitySet Name="Libraries" EntityType="Self.Library" />
+          <EntitySet Name="LibraryItems" EntityType="Self.LibraryItem" />
+          <EntitySet Name="Loans" EntityType="Self.Loan" />
+          <EntitySet Name="Users" EntityType="Self.User" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -124,7 +124,7 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище LibraryDBModelContainer" CdmEntityContainer="LibraryDBEntities">
-          <EntitySetMapping Name="Book">
+          <EntitySetMapping Name="Books">
             <EntityTypeMapping TypeName="LibraryDBModel.Book">
               <MappingFragment StoreEntitySet="Book">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -134,7 +134,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Library">
+          <EntitySetMapping Name="Libraries">
             <EntityTypeMapping TypeName="LibraryDBModel.Library">
               <MappingFragment StoreEntitySet="Library">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -142,7 +142,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LibraryItem">
+          <EntitySetMapping Name="LibraryItems">
             <EntityTypeMapping TypeName="LibraryDBModel.LibraryItem">
               <MappingFragment StoreEntitySet="LibraryItem">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -152,7 +152,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Loan">
+          <EntitySetMapping Name="Loans">
             <EntityTypeMapping TypeName="LibraryDBModel.Loan">
               <MappingFragment StoreEntitySet="Loan">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -163,7 +163,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="User">
+          <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="LibraryDBModel.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -190,7 +190,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
